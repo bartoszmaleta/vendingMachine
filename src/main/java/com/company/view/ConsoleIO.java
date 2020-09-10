@@ -24,10 +24,8 @@ public class ConsoleIO {
 
     public String queryUserString(String queryMessage){
         System.out.println(queryMessage);
-        String resp = sc.next();
-        return resp;
+        return sc.next();
     }
-
 
     public void displayUserString(String userMessage) {
         System.out.println(userMessage);
