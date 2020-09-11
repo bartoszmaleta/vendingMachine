@@ -1,8 +1,7 @@
 package com.company.controller;
 
-import com.company.dao.CoinDaoImpl;
+import com.company.dao.CoinDao;
 import com.company.dao.ProductDao;
-import com.company.dao.ProductDaoImpl;
 import com.company.model.Coin;
 import com.company.model.Product;
 import com.company.view.ConsoleIO;
@@ -10,12 +9,12 @@ import com.company.view.ConsoleIO;
 import java.text.DecimalFormat;
 
 public class Controller {
-    private ConsoleIO console;
-    private CoinDaoImpl coinDAO;
-    private ProductDaoImpl productDAO;
-    private DecimalFormat decimalFormat;
 
-    boolean keepRunning = true;
+    private final ConsoleIO console = new ConsoleIO();
+    private final CoinDao coinDAO;
+    private final ProductDao productDAO;
+    private final DecimalFormat decimalFormat = new DecimalFormat();
+
     double cost;
     double currentTotalCost;
     double indivInput;
@@ -34,17 +33,16 @@ public class Controller {
     int numOfCoinType = 0;
 
 
-    public Controller(ConsoleIO console, CoinDaoImpl coinDAO, ProductDaoImpl productDAO, DecimalFormat decimalFormat) {
-        this.console = console;
+    public Controller(CoinDao coinDAO, ProductDao productDAO) {
         this.coinDAO = coinDAO;
         this.productDAO = productDAO;
-        this.decimalFormat = decimalFormat;
     }
 
 
     public void run() {
-        displayMenu();
+        console.displayMenu();
 
+        boolean keepRunning = true;
         do {
             int userChoice;
             try {
@@ -82,25 +80,9 @@ public class Controller {
 
     }
 
-    private void displayMenu() {
-        console.displayUserString("\n**********************************");
-        console.displayUserString("*         Welcome to the         *");
-        console.displayUserString("*        Vending Machine!        *");
-        console.displayUserString("*                                *");
-        console.displayUserString("*        -- Main Menu --         *");
-        console.displayUserString("*                                *");
-        console.displayUserString("*       Would you like to:       *");
-        console.displayUserString("*    1. View Product List        *");
-        console.displayUserString("*    2. Purchase a Product       *");
-        console.displayUserString("*    3. Exit                     *");
-        console.displayUserString("*                                *");
-        console.displayUserString("**********************************\n");
-
-    }
-
     public void purchaseAProduct() {
         boolean sufficientProduct;
-        boolean onceAgain = true;
+        boolean onceAgain;
         do {
             String resp = console.queryUserString("\nPlease type your selected product!  ");
             switch (resp.toUpperCase()) {
@@ -161,7 +143,7 @@ public class Controller {
         for (Product currentProd : prods) {
             if (currentProd.getProductInventory() > 0) {
                 console.displayUserString("\t" + currentProd.toString() + "   is available");
-            } else if (currentProd.getProductInventory() <= 0) {
+            } else {
                 console.displayUserString("\t" + currentProd.toString() + " is currently unavailable. Sorry!");
             }
         }
@@ -180,6 +162,7 @@ public class Controller {
         do {
             setCustomerCoinSelection();
             indivInput = coinRealName.getCoinValue();
+            System.out.println("indivInput = " + indivInput);
             sufficientCoins = checkCoinInventory(coinRealName);
             if (sufficientCoins) {
                 numOfCoinType = console.queryUserInt("How many coins would you like to put in?");

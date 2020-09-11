@@ -30,4 +30,19 @@ public class ConsoleIO {
     public void displayUserString(String userMessage) {
         System.out.println(userMessage);
     }
+
+    public void displayMenu() {
+        displayUserString("\n**********************************");
+        displayUserString("*         Welcome to the         *");
+        displayUserString("*        Vending Machine!        *");
+        displayUserString("*                                *");
+        displayUserString("*        -- Main Menu --         *");
+        displayUserString("*                                *");
+        displayUserString("*       Would you like to:       *");
+        displayUserString("*    1. View Product List        *");
+        displayUserString("*    2. Purchase a Product       *");
+        displayUserString("*    3. Exit                     *");
+        displayUserString("*                                *");
+        displayUserString("**********************************\n");
+    }
 }
