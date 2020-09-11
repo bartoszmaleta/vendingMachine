@@ -4,13 +4,13 @@ import com.company.dao.CoinDao;
 import com.company.dao.ProductDao;
 import com.company.model.Coin;
 import com.company.model.Product;
-import com.company.view.ConsoleIO;
+import com.company.view.TerminalManager;
 
 import java.text.DecimalFormat;
 
 public class Controller {
 
-    private final ConsoleIO console = new ConsoleIO();
+    private final TerminalManager console = new TerminalManager();
     private final DecimalFormat decimalFormat = new DecimalFormat();
 
     private final CoinDao coinDAO;
@@ -39,33 +39,33 @@ public class Controller {
         do {
             int userChoice;
             try {
-                userChoice = console.queryUserIntRange("Please type the number that best suits you from the Main Menu: ", 1, 3);
+                userChoice = console.queryUserIntRange("Please enter a number: ", 1, 3);
 
                 switch (userChoice) {
                     case 1:
-                        console.displayUserString("\n ___ Today's Selections are: _____\n");
+                        console.displayUserString("\n ___ Available products: _____\n");
                         displayAllProducts();
                         console.displayUserString("\n _________________________________ \n ");
                         break;
                     case 2:
                         displayProductAvailability();
                         purchaseAProduct();
-                        console.displayUserString("\n ------ We accept these methods of payment ------ \n");
+                        console.displayUserString("\n ------ Payment methods ------ \n");
                         methodsOfPayment();
                         selectPaymentMethod();
-                        console.displayUserString("\nThanks for shopping with us today!\n");
+                        console.displayUserString("\nTransaction approved!\n");
                         totalInput = 0;
                         numProdPurchased = 0;
                         break;
                     case 3:
-                        console.displayUserString("Thanks for stopping by! ");
+                        console.displayUserString("Goodbye! ");
                         keepRunning = false;
                         break;
                     default:
-                        console.displayUserString("That appears to be an invalid option. \n Please try again. ");
+                        console.displayUserString("Invalid option. \n Please try again. ");
                 }
             } catch (Exception e) {
-                console.displayUserString("Exception caught, please try again at a later time.");
+                console.displayUserString("Exception caught, please try again.");
                 keepRunning = false;
             }
         } while (keepRunning);
@@ -77,7 +77,7 @@ public class Controller {
         boolean sufficientProduct;
         boolean onceAgain;
         do {
-            String resp = console.queryUserString("\nPlease type your selected product!  ");
+            String resp = console.queryUserString("\nPlease enter name of Your selected product!  ");
             switch (resp.toUpperCase()) {
                 case "CHIPS":
                     productType = Product.CHIPS;
@@ -98,7 +98,7 @@ public class Controller {
                     numProdPurchased++;
                     break;
                 default:
-                    console.displayUserString("I'm sorry, that seems to be an invalid option. Please try and type it again.");
+                    console.displayUserString("Invalid option. Please try again.");
             }
             sufficientProduct = checkProdInventory(productType);
             onceAgain = respondWithProdInventoryAndIterate(sufficientProduct, currentTotalCost, numProdPurchased);
@@ -109,15 +109,15 @@ public class Controller {
         boolean continueOn = true;
         if (enoughProduct) {
             decimalFormat.applyPattern("#0.00");
-            console.displayUserString("Your current total is: " + "$ " + decimalFormat.format(totalCost) + "\nTotal Items To Purchase " + numProdPurchased);
-            String keepGoing = console.queryUserString("Would you like anything else today? Y or N ");
+            console.displayUserString("Current total is: " + "$ " + decimalFormat.format(totalCost) + "\nTotal Items To Purchase " + numProdPurchased);
+            String keepGoing = console.queryUserString("Do You want to buy something else? (y/n)");
             if (keepGoing.equalsIgnoreCase("Y")) {
                 continueOn = true;
             } else if (keepGoing.equalsIgnoreCase("N")) {
                 continueOn = false;
             }
         } else {
-            console.displayUserString("Product selected is SOLD OUT. \nPlease select something else today.");
+            console.displayUserString("Product not available, probably SOLD OUT. \nSelect something else today.");
             continueOn = true;
         }
         return continueOn;
@@ -127,7 +127,7 @@ public class Controller {
         Product[] prodsAvail = productDAO.getProductTypes();
         for (Product currentProd : prodsAvail) {
             decimalFormat.applyPattern("#0.00");
-            console.displayUserString("\t" + currentProd.toString() + " --  COST : $ " + decimalFormat.format(currentProd.getProductCost()));
+            console.displayUserString("\t" + currentProd.toString() + " --  TOTAL COST : $ " + decimalFormat.format(currentProd.getProductCost()));
         }
     }
 
@@ -151,7 +151,7 @@ public class Controller {
     }
 
     public void selectPaymentMethod() {
-        console.displayUserString("\nIf at any point you want your coins returned. Please say RETURN.");
+        console.displayUserString("\nC - to cancel order.");
         do {
             setCustomerCoinSelection();
             coinValue = coinRealName.getCoinValue();
@@ -160,12 +160,12 @@ public class Controller {
             if (sufficientCoins) {
                 numOfCoinType = console.queryUserInt("How many coins would you like to put in?");
                 if (acceptableRangeForCoins(numOfCoinType)) {
-                    console.displayUserString("We are returning your coins.");
+                    console.displayUserString("Coins returned.");
                     numOfCoinType = 0;
                 }
                 determinePaymentTotal(coinValue, coinRealName, numOfCoinType);
             } else {
-                console.displayUserString("Currently experiencing low coin volume. Please enter in EXACT CHANGE ONLY");
+                console.displayUserString("Not enough coins in machine");
                 needMoreChange = true;
             }
         } while (needMoreChange);
@@ -240,22 +240,22 @@ public class Controller {
 
     public void setCustomerCoinSelection() {
         do {
-            String coinType = console.queryUserString("\nWhich coin would you like to start adding in?");
+            String coinType = console.queryUserString("\nWhich coin would You like to use?");
             switch (coinType.toUpperCase()) {
-                case "QUARTER":
+                case "Q":
                     coinRealName = Coin.QUARTER;
                     validCoin = true;
                     break;
-                case "DIME":
+                case "D":
                     coinRealName = Coin.DIME;
                     validCoin = true;
                     break;
-                case "NICKEL":
+                case "N":
                     coinRealName = Coin.NICKEL;
                     validCoin = true;
                     break;
-                case "RETURN":
-                    console.displayUserString("We are sorry to hear that. All coins are being returned. ");
+                case "C":
+                    console.displayUserString("Order canceled. All coins are being returned. ");
                     coinValue = 0;
                     validCoin = false;
                     break;
@@ -293,10 +293,10 @@ public class Controller {
 
 
         if (totalInput < currentTotalCost) {
-            console.displayUserString("We need more change!");
+            console.displayUserString("More coins needed!");
             needMoreChange = true;
         } else if (totalInput > currentTotalCost) {
-            console.displayUserString("Great! Generating your change. ");
+            console.displayUserString("Thanks for shopping! Here is Your change. ");
             needMoreChange = false;
             makeChange(quarterCount, dimeCount, nickelCount);
             currentTotalCost = 0;
