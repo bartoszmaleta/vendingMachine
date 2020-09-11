@@ -15,36 +15,36 @@ public class ProductDAOImplTest {
 
     @Test
     public void testCanGetAProduct() {
-        ProductDaoImpl productDAOTest = mock(ProductDaoImpl.class);
-        Product[] testProduct = Product.values();
-        when(productDAOTest.getProductTypes()).thenReturn(testProduct);
-        assertArrayEquals(testProduct, productDAOTest.getProductTypes());
-        verify(productDAOTest, times(1)).getProductTypes();
+        ProductDaoImpl productDaoMock = mock(ProductDaoImpl.class);
+        Product[] testProducts = Product.values();
+        when(productDaoMock.getProductTypes()).thenReturn(testProducts);
+        assertArrayEquals(testProducts, productDaoMock.getProductTypes());
+        verify(productDaoMock, times(1)).getProductTypes();
     }
 
     @Test
     public void testCanGetProductCost() {
-        ProductDaoImpl productDAOTest = mock(ProductDaoImpl.class);
-        when(productDAOTest.getProductCost()).thenReturn(.50);
-        assertEquals(.50, productDAOTest.getProductCost());
-        verify(productDAOTest, times(1)).getProductCost();
+        ProductDaoImpl productDaoMock = mock(ProductDaoImpl.class);
+        when(productDaoMock.getProductCost()).thenReturn(.50);
+        assertEquals(.50, productDaoMock.getProductCost());
+        verify(productDaoMock, times(1)).getProductCost();
 
     }
 
     @Test
     public void testCanGetInventory(){
-        ProductDaoImpl productDAOTest = mock(ProductDaoImpl.class);
+        ProductDaoImpl productDaoMock = mock(ProductDaoImpl.class);
         Product candy = Product.CANDY;
-        when(productDAOTest.getProductInventory(candy)).thenReturn(10);
-        assertEquals(10,productDAOTest.getProductInventory(candy));
-        verify(productDAOTest, times(1)).getProductInventory(candy);
+        when(productDaoMock.getProductInventory(candy)).thenReturn(10);
+        assertEquals(10,productDaoMock.getProductInventory(candy));
+        verify(productDaoMock, times(1)).getProductInventory(candy);
     }
 
     @Test
     public void testSetInventory(){
-        ProductDaoImpl productDAOTest = mock(ProductDaoImpl.class);
-        doNothing().when(productDAOTest).setProductInventory(9);
-        productDAOTest.setProductInventory(9);
-        verify(productDAOTest, times(1 )).setProductInventory(9);
+        ProductDaoImpl productDaoMock = mock(ProductDaoImpl.class);
+        doNothing().when(productDaoMock).setProductInventory(9);
+        productDaoMock.setProductInventory(9);
+        verify(productDaoMock, times(1 )).setProductInventory(9);
     }
 }
