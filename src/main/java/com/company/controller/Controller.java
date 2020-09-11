@@ -11,33 +11,26 @@ import java.text.DecimalFormat;
 public class Controller {
 
     private final ConsoleIO console = new ConsoleIO();
+    private final DecimalFormat decimalFormat = new DecimalFormat();
+
     private final CoinDao coinDAO;
     private final ProductDao productDAO;
-    private final DecimalFormat decimalFormat = new DecimalFormat();
 
     double cost;
     double currentTotalCost;
-    double indivInput;
+    double coinValue;
     double totalInput;
     Product productType;
     int numProdPurchased;
-    int resetInventory;
     boolean needMoreChange = false;
     boolean validCoin;
-    boolean sufficientCoins = true;
-    String coinType;
     Coin coinRealName = null;
-    int quarterCount = 0;
-    int dimeCount = 0;
-    int nickelCount = 0;
     int numOfCoinType = 0;
-
 
     public Controller(CoinDao coinDAO, ProductDao productDAO) {
         this.coinDAO = coinDAO;
         this.productDAO = productDAO;
     }
-
 
     public void run() {
         console.displayMenu();
@@ -161,16 +154,16 @@ public class Controller {
         console.displayUserString("\nIf at any point you want your coins returned. Please say RETURN.");
         do {
             setCustomerCoinSelection();
-            indivInput = coinRealName.getCoinValue();
-            System.out.println("indivInput = " + indivInput);
-            sufficientCoins = checkCoinInventory(coinRealName);
+            coinValue = coinRealName.getCoinValue();
+            System.out.println("indivInput = " + coinValue);
+            boolean sufficientCoins = checkCoinInventory(coinRealName);
             if (sufficientCoins) {
                 numOfCoinType = console.queryUserInt("How many coins would you like to put in?");
                 if (acceptableRangeForCoins(numOfCoinType)) {
                     console.displayUserString("We are returning your coins.");
                     numOfCoinType = 0;
                 }
-                determinePaymentTotal(indivInput, coinRealName, numOfCoinType);
+                determinePaymentTotal(coinValue, coinRealName, numOfCoinType);
             } else {
                 console.displayUserString("Currently experiencing low coin volume. Please enter in EXACT CHANGE ONLY");
                 needMoreChange = true;
@@ -213,7 +206,7 @@ public class Controller {
         if (initialInv <= 0) {
             sufficientProd = false;
         }
-        resetInventory = initialInv - 1;
+        int resetInventory = initialInv - 1;
         prodT.setProductInventory(resetInventory);
         return sufficientProd;
     }
@@ -247,7 +240,7 @@ public class Controller {
 
     public void setCustomerCoinSelection() {
         do {
-            coinType = console.queryUserString("\nWhich coin would you like to start adding in?");
+            String coinType = console.queryUserString("\nWhich coin would you like to start adding in?");
             switch (coinType.toUpperCase()) {
                 case "QUARTER":
                     coinRealName = Coin.QUARTER;
@@ -263,7 +256,7 @@ public class Controller {
                     break;
                 case "RETURN":
                     console.displayUserString("We are sorry to hear that. All coins are being returned. ");
-                    indivInput = 0;
+                    coinValue = 0;
                     validCoin = false;
                     break;
                 default:
@@ -278,6 +271,9 @@ public class Controller {
     }
 
     public void determinePaymentTotal(double customerInput, Coin coinToUse, int numOfCoinsSelected) {
+        int quarterCount = 0;
+        int nickelCount = 0;
+        int dimeCount = 0;
         switch (coinToUse) {
             case QUARTER:
                 quarterCount = numOfCoinsSelected;
