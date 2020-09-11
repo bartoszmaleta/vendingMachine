@@ -1,6 +1,7 @@
 package com.company.view;
 
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class TerminalManagerTest {
 
+//    @Disabled
     @Test
     public void testQueryUserInt() {
         TerminalManager cons = mock(TerminalManager.class);
@@ -18,6 +20,7 @@ public class TerminalManagerTest {
         verify(cons, times(1)).queryUserInt("How many would you like?");
     }
 
+//    @Disabled
     @Test
     public void testQueryUserIntRange() {
         TerminalManager cons = mock(TerminalManager.class);
@@ -26,6 +29,7 @@ public class TerminalManagerTest {
         verify(cons, times(1)).queryUserIntRange("How many would you like?", 1, 10);
     }
 
+//    @Disabled
     @Test
     public void testQueryUserString() {
         TerminalManager cons = mock(TerminalManager.class);

@@ -69,8 +69,6 @@ public class Controller {
                 keepRunning = false;
             }
         } while (keepRunning);
-
-
     }
 
     public void purchaseAProduct() {
@@ -127,7 +125,7 @@ public class Controller {
         Product[] prodsAvail = productDAO.getProductTypes();
         for (Product currentProd : prodsAvail) {
             decimalFormat.applyPattern("#0.00");
-            console.displayUserString("\t" + currentProd.toString() + " --  TOTAL COST : $ " + decimalFormat.format(currentProd.getProductCost()));
+            console.displayUserString("\t" + currentProd.toString() + " ===>  COST : $ " + decimalFormat.format(currentProd.getProductCost()));
         }
     }
 
@@ -155,15 +153,15 @@ public class Controller {
         do {
             setCustomerCoinSelection();
             coinValue = coinRealName.getCoinValue();
-            System.out.println("indivInput = " + coinValue);
+            console.displayUserString("Coin value ===> $ " + coinValue);
             boolean sufficientCoins = checkCoinInventory(coinRealName);
             if (sufficientCoins) {
-                numOfCoinType = console.queryUserInt("How many coins would you like to put in?");
+                numOfCoinType = console.queryUserInt("How many coins will You use?");
                 if (acceptableRangeForCoins(numOfCoinType)) {
                     console.displayUserString("Coins returned.");
                     numOfCoinType = 0;
                 }
-                determinePaymentTotal(coinValue, coinRealName, numOfCoinType);
+                calculatePaymentTotal(coinValue, coinRealName, numOfCoinType);
             } else {
                 console.displayUserString("Not enough coins in machine");
                 needMoreChange = true;
@@ -173,7 +171,7 @@ public class Controller {
 
     public void makeChange(int qCount, int dCount, int nCount) {
         double remainder = totalInput - currentTotalCost;
-        console.displayUserString("You get $" + decimalFormat.format(remainder));
+        console.displayUserString("You get ===> $" + decimalFormat.format(remainder));
         double numDimesReturned;
         double numNickelsReturned;
         double numQrtrsReturned;
@@ -270,7 +268,7 @@ public class Controller {
         } while (!validCoin);
     }
 
-    public void determinePaymentTotal(double customerInput, Coin coinToUse, int numOfCoinsSelected) {
+    public void calculatePaymentTotal(double customerInput, Coin coinToUse, int numOfCoinsSelected) {
         int quarterCount = 0;
         int nickelCount = 0;
         int dimeCount = 0;
@@ -288,8 +286,8 @@ public class Controller {
         double thisInput = customerInput * numOfCoinsSelected;
         totalInput = thisInput + totalInput;
         decimalFormat.applyPattern("#0.00");
-        console.displayUserString("You inserted " + numOfCoinsSelected + "  " + coinToUse + "S ... for a total of : $" + decimalFormat.format(thisInput));
-        console.displayUserString("Total Customer Input is : $" + decimalFormat.format(totalInput) + "\nYour total cost is : $" + decimalFormat.format(currentTotalCost));
+        console.displayUserString("You provided ===> " + numOfCoinsSelected + " " + coinToUse + "S\n Value of inserted coins ===> $" + decimalFormat.format(thisInput));
+        console.displayUserString("Total customer coins value is ===> $" + decimalFormat.format(totalInput) + "\nYour total cost is ===> $" + decimalFormat.format(currentTotalCost));
 
 
         if (totalInput < currentTotalCost) {

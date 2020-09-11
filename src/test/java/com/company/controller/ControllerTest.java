@@ -25,9 +25,9 @@ public class ControllerTest {
     public void testDeterminePaymentTotal() {
         Coin coinTest = Coin.QUARTER;
         Controller controller = mock(Controller.class);
-        doNothing().when(controller).determinePaymentTotal(isA(Double.class), isA(Coin.class), isA(Integer.class));
-        controller.determinePaymentTotal(2.0, coinTest, 11);
-        verify(controller, times(1)).determinePaymentTotal(2.0, coinTest, 11);
+        doNothing().when(controller).calculatePaymentTotal(isA(Double.class), isA(Coin.class), isA(Integer.class));
+        controller.calculatePaymentTotal(2.0, coinTest, 11);
+        verify(controller, times(1)).calculatePaymentTotal(2.0, coinTest, 11);
     }
 
     @Test
