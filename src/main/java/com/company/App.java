@@ -16,3 +16,5 @@ public class App
         controller.run();
     }
 }
+
+// TODO: catch exception about not enough coins in machine!

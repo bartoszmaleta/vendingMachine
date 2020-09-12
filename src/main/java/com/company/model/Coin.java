@@ -5,7 +5,7 @@ public enum Coin {
     DIME(.10),
     NICKEL(.05);
 
-    private int coinInventory = 50;
+    private int coinInventory = 10;
     private final double coinValue;
     Coin (double coinValue){
         this.coinValue = coinValue;
